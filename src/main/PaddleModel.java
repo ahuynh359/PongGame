@@ -1,9 +1,13 @@
 package main;
 
-public abstract class PaddleModel {
-	
-	 void move() {
+import java.awt.Graphics;
 
-	}
+public abstract class PaddleModel  {
+	
+	abstract void move();
+	abstract void paint(Graphics g);
+	abstract int getY();
+	abstract void setUp(boolean input);
+	abstract void setDown(boolean input);
 
 }
