@@ -20,13 +20,15 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 
 	private Thread thread;
 	private boolean running;
+	
+	private Collided isCollided;
 
-	private boolean isGameOver = true;
+
 
 	private Ball ball;
 
 	private int scorePly1, scorePly2;
-	private boolean isPlayer1GameOver = false, isPlayer2GameOver = false;
+	
 
 	public Panel() {
 
@@ -40,9 +42,21 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 		ball = new Ball(WIDTH / 2 - 12, HEIGHT / 2);
 
 		startThread();
+		
+		this.isCollided = ball;
 
 	}
 
+	
+	
+	private void onUpdate(boolean isCollidedForPlayer1, boolean  isCollidedForPlayer2) {
+		isCollided.isCollided(isCollidedForPlayer1,isCollidedForPlayer2);
+	}
+	
+	
+	
+	
+	
 	private void startThread() {
 		running = true;
 		if (thread == null) {
@@ -60,51 +74,26 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 			e.printStackTrace();
 		}
 	}
-
-	private int getRandomDirect() {
-		Random random = new Random();
-
-		return random.nextInt(100 - 5) + 5;
+	
+	private void isCollided() {
+		if (player1.getX() + Paddle.P_WIDTH >= ball.getX()) {
+			onUpdate(true, false);
+		}
+		if (player2.getX() <= ball.getX() + 25) {
+			onUpdate(false, true);
+		}
 	}
 
-	private boolean isCollidedForPlayer1(Paddle paddle, Ball ball) {
 
-		if (paddle.getX() + Paddle.P_WIDTH >= ball.getX()) {
-			return true;
-		}
 
-		return false;
-	}
+	
+	
 
-	private boolean isCollidedForPlayer2(Paddle paddle, Ball ball) {
-
-		if (paddle.getX() <= ball.getX() + 25) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private void isGameOver() {
-		if (ball.getX() <= 0) {
-			isPlayer1GameOver = true;
-
-		}
-
-		if (ball.getX() + 25 >= WIDTH) {
-			isPlayer2GameOver = true;
-		}
-
-	}
-
-	private void gameUpdate() {
-		if (isCollidedForPlayer1(player1, ball)) {
-			scorePly1++;
-		}
-
-		if (isCollidedForPlayer2(player2, ball)) {
-			scorePly2++;
-		}
+	private void score() {
+		
+		
+		
+		
 	}
 
 	@Override
@@ -117,7 +106,7 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 
 		g.setColor(Color.white);
 
-		if (!isPlayer1GameOver && !isPlayer2GameOver) {
+		if (!ball.isGameOver1() && !ball.isGameOver2()) {
 
 			// drawline
 			g.drawLine(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
@@ -134,11 +123,11 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 			g.drawString("Player One: " + scorePly1, 20, 30);
 
 			g.setFont(new Font("Arial", Font.BOLD, 20));
-			g.drawString("Player Two: " + scorePly2, 550, 30);
-		} else {
-			if (isPlayer1GameOver) {
-				g.setFont(new Font("Arial", Font.BOLD, 50));
-				g.drawString("Player1 is a loser", 213, 50);
+			g.drawString("Player Two: " + scorePly2, 550, 30);}
+		else {
+		if (ball.isGameOver1()) {
+			g.setFont(new Font("Arial", Font.BOLD, 50));
+			g.drawString("Player1 is a loser", 213, 50);
 			} else {
 				g.setFont(new Font("Arial", Font.BOLD, 50));
 				g.drawString("Player2 is a loser", 213, 50);
@@ -186,7 +175,8 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 		while (running) {
 
 			try {
-				gameUpdate();
+				isCollided();
+				score();
 				player1.move();
 				player2.move();
 				ball.move();
@@ -201,4 +191,5 @@ public class Panel extends JPanel implements KeyListener, Runnable {
 
 	}
 
+	
 }
