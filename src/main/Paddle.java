@@ -62,7 +62,6 @@ public class Paddle extends PaddleModel {
 
 	@Override
 	int getX() {
-
 		return x;
 	}
 

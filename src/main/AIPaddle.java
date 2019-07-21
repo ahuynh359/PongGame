@@ -5,21 +5,22 @@ import java.awt.Graphics;
 
 public class AIPaddle extends PaddleModel {
 
-	private int x;
-	private double y;
+	private int x, y;
+
 	private Ball ball;
 
-	public AIPaddle() {
+	public AIPaddle(Ball ball) {
 		x = Panel.WIDTH - 20;
 		y = 520 / 2 - 40;
-		ball = new Ball();
+		this.ball = ball;
+
 	}
 
 	@Override
 	void move() {
 
 		y = ball.getY() - 40;
-		System.out.println("PAddle" + ball.getY());
+
 		if (y <= 0)
 			y = 0;
 		if (y >= 420)
@@ -30,13 +31,15 @@ public class AIPaddle extends PaddleModel {
 	@Override
 	void paint(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(x, (int) y, 20, 80);
+		g.fillRect(x, y, 20, 80);
 		move();
 
 	}
 
+	@Override
+
 	int getY() {
-		return (int) y;
+		return y;
 	}
 
 	@Override
@@ -49,6 +52,7 @@ public class AIPaddle extends PaddleModel {
 
 	}
 
+	@Override
 	int getX() {
 		return x;
 	}

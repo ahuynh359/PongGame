@@ -18,22 +18,19 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 	private Paddle paddle;
 	private AIPaddle aiPaddle;
 
-	private int playerScore, computer;
-
 	private Ball ball;
+	
 
 	public Panel() {
 
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		addKeyListener(this);
-
-		paddle = new Paddle();
-		aiPaddle = new AIPaddle();
 		ball = new Ball();
+		paddle = new Paddle();
+		aiPaddle = new AIPaddle(ball);
 
-		playerScore = 0;
-		computer = 0;
+	
 
 		thread = new Thread(this);
 		thread.start();
@@ -45,17 +42,26 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
-
+		
+		
+		if(!ball.isGameOver(paddle)) {
+		
 		g.setColor(Color.white);
 		g.drawLine(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.drawString("Player: " + playerScore, 30, 30);
-		g.drawString("Computer: " + computer, 570, 30);
+		g.drawString("Player: " + ball.getScore(), 30, 30);
 
 		paddle.paint(g);
 		aiPaddle.paint(g);
 		ball.paint(g);
+		} else {
+			g.setColor(Color.white);
+			g.setFont(new Font("Arial", Font.BOLD, 30));
+			g.drawString("Game Over  " , 300, 250);
+	
+
+		}
 
 	}
 
@@ -63,6 +69,8 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 	public void run() {
 
 		while (true) {
+			System.out.println("PAddle" + ball.getY());
+
 			ball.checkCollision(paddle, aiPaddle);
 			repaint();
 			try {
