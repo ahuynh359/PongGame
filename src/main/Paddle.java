@@ -7,7 +7,7 @@ public class Paddle extends PaddleModel {
 
 	private int x;
 	private double y;
-	private final double GRAVITY =  0.94;
+	private final double GRAVITY = 0.94;
 	private double yVel;
 
 	private boolean isUp, isDown;
@@ -21,7 +21,7 @@ public class Paddle extends PaddleModel {
 	@Override
 	void paint(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(x,(int) y, 20, 80);
+		g.fillRect(x, (int) y, 20, 80);
 		move();
 
 	}
@@ -29,16 +29,14 @@ public class Paddle extends PaddleModel {
 	@Override
 	void move() {
 
-		
-
 		if (isUp) {
-			yVel -=1.25 ;
+			yVel -= 1.25;
 		} else if (isDown) {
 			yVel += 1.25;
 		} else if (!isUp && !isDown) {
 			yVel *= GRAVITY;
 		}
-		
+
 		y += yVel;
 
 		if (y <= 0)
@@ -49,7 +47,7 @@ public class Paddle extends PaddleModel {
 
 	@Override
 	int getY() {
-		return 0;
+		return (int) y;
 	}
 
 	@Override
@@ -60,6 +58,12 @@ public class Paddle extends PaddleModel {
 	@Override
 	void setDown(boolean input) {
 		this.isDown = input;
+	}
+
+	@Override
+	int getX() {
+
+		return x;
 	}
 
 }

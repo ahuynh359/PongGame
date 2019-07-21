@@ -19,7 +19,7 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 	private AIPaddle aiPaddle;
 
 	private int playerScore, computer;
-	
+
 	private Ball ball;
 
 	public Panel() {
@@ -27,16 +27,16 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		addKeyListener(this);
-		thread = new Thread(this);
-		thread.start();
 
 		paddle = new Paddle();
 		aiPaddle = new AIPaddle();
 		ball = new Ball();
-		
-		
+
 		playerScore = 0;
 		computer = 0;
+
+		thread = new Thread(this);
+		thread.start();
 
 	}
 
@@ -63,6 +63,7 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 	public void run() {
 
 		while (true) {
+			ball.checkCollision(paddle, aiPaddle);
 			repaint();
 			try {
 				Thread.sleep(10);
@@ -90,7 +91,7 @@ public class Panel extends JPanel implements Runnable, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		paddle.setDown(false);
-		;
+
 		paddle.setUp(false);
 	}
 
